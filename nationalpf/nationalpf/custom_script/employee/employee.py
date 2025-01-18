@@ -80,7 +80,7 @@ def create_salary_structure(doc, structure_name, row_data):
 		"earnings": earnings,
 		"deductions": deductions,
 		"payroll_frequency": "Monthly",
-		"currency": "INR",
+		"currency": "AED",
 		"is_active": "Yes",
 		"docstatus": 1
 	}
@@ -121,12 +121,14 @@ def salary_structure_assignment(doc, salary_structure):
 
 def update_gross_amount(doc):
 
-	new_row_data = doc.as_dict()
-	if len(new_row_data.get("custom_earnings",[])) >0:
-		new_component_amount = sum(each.get("amount", 0) for each in new_row_data.get("custom_earnings", []))
-		frappe.db.set_value("Employee",{"name":new_row_data.get("name")},{"custom_gross_amount":new_component_amount})
-		frappe.db.commit()
-		return new_component_amount
+    new_row_data = doc.as_dict()
+    if len(new_row_data.get("custom_earnings",[])) >0 and len(new_row_data.get("custom_deductions",[])) >0:
+        new_component_amount = sum(each.get("amount", 0) for each in new_row_data.get("custom_earnings", [])) + sum(each.get("amount", 0) for each in new_row_data.get("custom_deductions",[]))
+        frappe.db.set_value("Employee",{"name":new_row_data.get("name")},{"custom_gross_amount":new_component_amount})
+        frappe.db.commit()
+        return new_component_amount
+    else:
+        frappe.throw("Fill the earnings and deductions to calculate the gross amount")
 
 
 
