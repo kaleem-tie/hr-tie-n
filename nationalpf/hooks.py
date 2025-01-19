@@ -137,7 +137,10 @@ doc_events = {
     },
     "Salary Slip":
         {
-        "after_insert":"nationalpf.nationalpf.custom_script.attandance.attandance.get_ot_hours_pay"
+        "before_insert":"nationalpf.nationalpf.custom_script.attandance.attandance.get_ot_hours_pay"
+        },
+    "Leave Allocation":{
+        "before_insert":"nationalpf.nationalpf.custom_script.leave_appilcation.leave_appication.alert_for_leave_appication"
         }
 
  }

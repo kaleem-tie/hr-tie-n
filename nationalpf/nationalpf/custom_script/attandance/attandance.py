@@ -165,56 +165,84 @@ def calculate_total_hours(attendance_doc, checkin_date):
 
 
 @frappe.whitelist()
-def get_ot_hours_pay(self,method):
+def get_ot_hours_pay(self, method):
 	try:
-		self = frappe.get_doc("Salary Slip", self)
-		
 		employe_base_amount = frappe.get_doc("Employee", self.employee)
 
 		if not employe_base_amount:
 			frappe.throw("Employee details not found.")
 
-		attan = frappe.get_all("Attendance", filters={"employee":employe_base_amount.name},fields=['*	'])
+		attan = frappe.get_all("Attendance", filters={"employee": employe_base_amount.name, "attendance_date": ["Between", [self.start_date, self.end_date]]}, fields=['*'])
+		if not attan:
+			frappe.throw("Attendance details not found.")
+			
 		docu = frappe.get_doc("Shift Type", attan[0].shift)
 
-		if not docu or not attan:
-			frappe.error_log("Check the links properly")
+		if not docu:
+			frappe.error_log("Shift type not found.")
 			return
+		if employe_base_amount.custom_ot_eligibility == "Yes":
+			start_time = docu.start_time
+			end_time = docu.end_time
+			working = 0
 
-		start_time = docu.start_time
-		end_time = docu.end_time
-		working = 0
-		
-		tome_dur = end_time - start_time
-		working_hours = 0
-		ot_hours = 0
-		for i in attan:
-			working_hours += i.working_hours
+			tome_dur = end_time - start_time
+			working_hours = 0
+			ot_hours = 0
+			for i in attan:
+				working_hours += round(i.working_hours)
 
-		
-			ot_hours += i.working_hours - abs(round(tome_dur.total_seconds() / 3600.0,2))
+				if i.working_hours - abs(round(tome_dur.total_seconds() / 3600.0, 2)) <= 3:
+					ot_hours += round(i.working_hours) - abs(round(tome_dur.total_seconds() / 3600.0, 2))
+				if i.working_hours - abs(round(tome_dur.total_seconds() / 3600.0, 2)) > 3:
+					ot_hours += 3
 
-		holida_list = frappe.get_doc("Holiday List", docu.holiday_list)
-		if not holida_list:
-			frappe.throw("Holiday List not found.")
+			holida_list = frappe.get_doc("Holiday List", docu.holiday_list)
+			if not holida_list:
+				frappe.throw("Holiday List not found.")
+
+			base_amount = next((amount.amount for amount in employe_base_amount.custom_earnings if amount.salary_component == "Basic Pay"),0)  # Default to 0 if no match is found
+
+			# base_amount = employe_base_amount.custom_gross_amount
 
 
-		base_amount = employe_base_amount.custom_gross_amount
-		calculate_ot_amount = 0
-		per_hour_amount = base_amount / 30 / abs(round(tome_dur.total_seconds() / 3600.0, 2))
-		if ot_hours <= 3:
-			calculate_ot_amount += per_hour_amount * 1.25 *  ot_hours
-		else:
-			frappe.throw("wertg")
-		for j in attan:
-			if any(j.attendance_date == holiday.holiday_date for holiday in holida_list.holidays):
-				working = working + j.working_hours
-				# return working
-				if abs(round(tome_dur.total_seconds() / 3600.0,2)) <= 12:
-					calculate_ot_amount += per_hour_amount * 1.5 * working
-		self.custom_ot_hour = working + ot_hours
-		self.custom_ot_pay_amount = round(calculate_ot_amount)
-		self.save()
+			calculate_ot_amount = 0
+			per_hour_amount = base_amount / 30 / abs(round(tome_dur.total_seconds() / 3600.0, 2))
+			
+			calculate_ot_amount += round(per_hour_amount) * 1.25 * ot_hours
+			
+			for j in attan:
+				if any(j.attendance_date == holiday.holiday_date for holiday in holida_list.holidays):
+					working += j.working_hours
+
+					if abs(round(tome_dur.total_seconds() / 3600.0, 2)) <= 12:
+						calculate_ot_amount = round(per_hour_amount) * 1.5 * working
+					if abs(round(tome_dur.total_seconds() / 3600.0, 2)) > 12:
+						calculate_ot_amount = round(per_hour_amount) * 1.5 * 12
+
+			self.custom_ot_hour = round(working + ot_hours)
+			self.custom_ot_pay_amount = round(calculate_ot_amount)
+
+			frappe.db.commit()
+
+		current_year = datetime.now().year
+		current_month = datetime.now().month
+
+		date_25th = datetime(current_year, current_month, 25)
+
+		formatted_date = date_25th.strftime("%Y-%m-%d")
+		new_additional_salary = frappe.new_doc("Additional Salary")
+		new_additional_salary.update({
+			"employee":self.employee,
+			"company":self.company,
+			"payroll_date":formatted_date,
+			"salary_component":"OT Arrears",
+			"currency":"AED",
+			"amount": round(calculate_ot_amount),
+			"docstatus":1
+
+		})
+		new_additional_salary.insert()
 		frappe.db.commit()
 	except Exception as ex:
 		return str(ex)
