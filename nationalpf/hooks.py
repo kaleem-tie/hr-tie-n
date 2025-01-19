@@ -131,7 +131,14 @@ doc_events = {
 
     "Employee":{
         "on_update":"nationalpf.nationalpf.custom_script.employee.employee.create_salary_structure_through_employee"
-    }
+    },
+    "Employee Checkin":{
+        "after_insert":"nationalpf.nationalpf.custom_script.attandance.attandance.get_attendance"
+    },
+    "Salary Slip":
+        {
+        "after_insert":"nationalpf.nationalpf.custom_script.attandance.attandance.get_ot_hours_pay"
+        }
 
  }
 
