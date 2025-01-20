@@ -42,7 +42,7 @@ class NPFGratuity(Document):
 			gratuity_for_first_5_years = flt((basic_pay / 30) * 21 * 5)
 			remaining_years = self.current_work_experience - 5
 			gratuity_for_remaining_years = flt((basic_pay / 30) * 30 * remaining_years)
-			self.calculate_ot_amountcustom_amount = gratuity_for_first_5_years + gratuity_for_remaining_years
+			self.custom_amount = gratuity_for_first_5_years + gratuity_for_remaining_years
 
 
 

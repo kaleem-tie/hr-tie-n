@@ -235,7 +235,7 @@ def get_ot_hours_pay(self, method):
 		new_additional_salary.update({
 			"employee":self.employee,
 			"company":self.company,
-			"payroll_date":formatted_date,
+			"payroll_date":'2024-11-25',#formatted_date
 			"salary_component":"OT Arrears",
 			"currency":"AED",
 			"amount": round(calculate_ot_amount),

@@ -1,0 +1,134 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:LA-.###",
+ "creation": "2025-01-20 12:49:53.797613",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "employee",
+  "employee_name",
+  "department",
+  "designation",
+  "loan_type",
+  "loan_apply_date",
+  "column_break_bo4g",
+  "basic_pay",
+  "loan_amount",
+  "insdate_start",
+  "noof_period",
+  "reason_for_loan",
+  "section_break_lluz",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee ",
+   "options": "Employee"
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.department",
+   "fieldname": "department",
+   "fieldtype": "Data",
+   "label": "Department",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.designation",
+   "fieldname": "designation",
+   "fieldtype": "Data",
+   "label": "Designation",
+   "read_only": 1
+  },
+  {
+   "fieldname": "loan_type",
+   "fieldtype": "Link",
+   "label": "Loan Type",
+   "options": "Loan Type"
+  },
+  {
+   "fieldname": "basic_pay",
+   "fieldtype": "Data",
+   "label": "Basic Pay"
+  },
+  {
+   "fieldname": "loan_amount",
+   "fieldtype": "Currency",
+   "label": "Loan Amount"
+  },
+  {
+   "fieldname": "insdate_start",
+   "fieldtype": "Date",
+   "label": "Ins.Date Start"
+  },
+  {
+   "fieldname": "noof_period",
+   "fieldtype": "Int",
+   "label": "No.of Period"
+  },
+  {
+   "fieldname": "reason_for_loan",
+   "fieldtype": "Small Text",
+   "label": "Reason For Loan"
+  },
+  {
+   "fieldname": "column_break_bo4g",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_lluz",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Loan Application",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "loan_apply_date",
+   "fieldtype": "Date",
+   "label": "Loan Apply Date"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-01-20 13:16:55.731574",
+ "modified_by": "Administrator",
+ "module": "Nationalpf",
+ "name": "Loan Application",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
