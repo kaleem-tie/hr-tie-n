@@ -28,7 +28,7 @@ class LoanApplication(Document):
             "salary_component": "Loan Installment Deduction",
             "currency": "AED",
             "amount": amount_per_month,
-            "docstatus": 0
+            "docstatus": 1
         })
         
         new_additional_salary.insert()

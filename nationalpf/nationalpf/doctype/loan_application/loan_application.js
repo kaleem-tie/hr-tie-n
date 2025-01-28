@@ -15,7 +15,7 @@ frappe.ui.form.on("Loan Application", {
                     if (r.message && r.message.custom_earnings) {
                         let basicPay = 0;
                         r.message.custom_earnings.forEach(function(earning) {
-                            if (earning.salary_component === "Basic") {
+                            if (earning.salary_component === "Basic Pay") {
                                 basicPay = earning.amount;  
                             }
                         });
