@@ -1,7 +1,9 @@
 
 import frappe
 from datetime import datetime, timedelta,timezone
-from frappe.utils import get_first_day, get_last_day, date_diff
+from frappe.utils import get_first_day, get_last_day, date_diff,time_diff_in_hours
+from datetime import timedelta
+
 # from datetime import datetime, timezone
 
 
@@ -226,12 +228,15 @@ def get_ot_hours_pay(self, method = None):
 			medical_leave_count = len(medical_leave_records)
 			total_present_and_medical_leave = present_count + medical_leave_count
 
-
 			insetive_hour = 0
 			for record in attendance_records:
+				working_time = timedelta(hours=round(record.working_hours))
 				if record.attendance_date not in [holiday.holiday_date for holiday in holiday_list_doc.holidays]:
-					insetive_hour+= 3
+					# insetive_hour+= 3
 					ot_hours_total += round(record.working_hours) - abs(round(tome_dur.total_seconds() / 3600.0, 2))
+					
+					if round(record.working_hours) > round(tome_dur.total_seconds() / 3600.0, 2):
+						insetive_hour += 3
 
 			if not holiday_list_doc:
 				frappe.throw("Holiday List not found in employee details.")
@@ -269,7 +274,7 @@ def get_ot_hours_pay(self, method = None):
 			
 			calculate_ot_amount = 0
 			actuval_amount = 0
-			if employee_doc.custom_ot_formula == "B/300":
+			if employee_doc.custom_ot_formula == "B/300" or employee_doc.custom_ot_formula == "BF/360":
 				
 				calculate_ot_amount += base_amount * ot_hours_total
 				actuval_amount = insentve_basic * insetive_hour 
@@ -281,25 +286,26 @@ def get_ot_hours_pay(self, method = None):
 
 			week_off_working = 0
 			insentve_basic_amount = 0
-
+			working_ot_hour_in_holidays = 0
 			for record in attendance_records:
 				if record.attendance_date  in [holiday.holiday_date for holiday in holiday_list_doc.holidays]:
 				
 					working_hours_total += record.working_hours
 					week_off_working += record.working_hours 
-					if employee_doc.custom_ot_formula != "B/300":
-						insentve_basic_amount = insentve_basic * week_off_working * 1.5
-						calculate_ot_amount = base_amount * 1.5 * (working_hours_total + ot_hours_total)
+					if employee_doc.custom_ot_formula == "B/300" or employee_doc.custom_ot_formula == "BF/360":
+						insentve_basic_amount = insentve_basic * week_off_working
+						working_ot_hour_in_holidays = base_amount * (working_hours_total )
 					else:
-						insentve_basic_amount = insentve_basic * week_off_working 
-						calculate_ot_amount = base_amount * (working_hours_total + ot_hours_total)
+						insentve_basic_amount = insentve_basic * week_off_working * 1.5
+						working_ot_hour_in_holidays = base_amount * 1.5  * (working_hours_total )
 		
-			insentve_basic_total_amount = insentve_basic_amount + actuval_amount 
-			amount = insentve_basic_total_amount - calculate_ot_amount
-			
+			insentve_basic_total_amount = insentve_basic_amount + actuval_amount if calculate_ot_amount != 0 else insentve_basic_amount
+			amount = insentve_basic_total_amount - calculate_ot_amount -working_ot_hour_in_holidays
+			# return working_ot_hour_in_holidays
+			# return base_amount * (working_hours_total ) *1.5
 			incentive_amount_funt = incentive_amount(self,amount)
 			self.custom_ot_hour = (working_hours_total + ot_hours_total)
-			self.custom_ot_pay_amount = calculate_ot_amount
+			self.custom_ot_pay_amount = calculate_ot_amount + working_ot_hour_in_holidays
 
 			current_year = datetime.now().year
 			current_month = datetime.now().month
