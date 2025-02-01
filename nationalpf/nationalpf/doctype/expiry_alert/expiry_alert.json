@@ -61,7 +61,7 @@
   },
   {
    "fieldname": "id_card_no",
-   "fieldtype": "Data",
+   "fieldtype": "Int",
    "label": "ID Card No"
   },
   {
@@ -122,7 +122,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-02-01 20:11:29.643967",
+ "modified": "2025-02-01 20:27:13.008319",
  "modified_by": "Administrator",
  "module": "Nationalpf",
  "name": "Expiry Alert",
