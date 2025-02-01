@@ -141,7 +141,10 @@ doc_events = {
         },
     "Leave Allocation":{
         "before_insert":"nationalpf.nationalpf.custom_script.leave_appilcation.leave_appication.alert_for_leave_appication"
-        }
+        },
+    "Salary Structure Assignment":{
+        "before_save":["nationalpf.nationalpf.custom_script.employee.employee.salary_asiignment"]
+}    
 
  }
 

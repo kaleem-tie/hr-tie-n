@@ -1,0 +1,63 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "TED-.###",
+ "creation": "2025-02-01 19:43:30.528912",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "date",
+  "expense_details",
+  "allowed_rate",
+  "actual_amount",
+  "attachment",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "expense_details",
+   "fieldtype": "Link",
+   "label": "Expense Details",
+   "options": "NPF Expense Details"
+  },
+  {
+   "fieldname": "allowed_rate",
+   "fieldtype": "Currency",
+   "label": "Allowed Rate"
+  },
+  {
+   "fieldname": "actual_amount",
+   "fieldtype": "Currency",
+   "label": "Actual Amount"
+  },
+  {
+   "fieldname": "attachment",
+   "fieldtype": "Attach",
+   "label": "Attachment"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-02-01 19:53:52.923595",
+ "modified_by": "Administrator",
+ "module": "Nationalpf",
+ "name": "Trip Expense Details",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

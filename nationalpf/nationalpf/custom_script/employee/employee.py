@@ -10,7 +10,7 @@ def create_salary_structure_through_employee(doc, method=None):
 		row_data = doc.as_dict()
 		current_month, current_year = None, None
 
-		if doc.custom_effective_date:
+		if doc.custom_effective_date and len(doc.custom_earnings) > 0:
 		   
 			change_date = getdate(doc.custom_effective_date)
 			current_year = change_date.year
@@ -224,3 +224,12 @@ def update_salary_assigement_value_or_base(doc,structure_name):
 		new_component_amount = sum(each.get("amount", 0) for each in new_row_data.get("custom_earnings", []))
 		frappe.db.set_value("Salary Structure Assignment",{"salary_structure":structure_name,"from_date":doc.custom_effective_date},{"base":new_component_amount})
 	frappe.db.commit()
+
+@frappe.whitelist()
+def salary_asiignment(self,method):
+    salary_asiignments = frappe.get_doc("Salary Structure",self.salary_structure) 
+    
+    for earning in salary_asiignments.earnings:
+        if earning.amount:
+            self.base += earning.amount
+        frappe.db.commit()	
