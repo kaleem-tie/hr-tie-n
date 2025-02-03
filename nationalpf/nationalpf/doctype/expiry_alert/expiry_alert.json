@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "field:employee_name",
+ "autoname": "EA-.####",
  "creation": "2025-02-01 19:24:11.926169",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -19,7 +19,16 @@
   "passport_number",
   "column_break_ry8x",
   "expiry_date",
-  "amended_from"
+  "section_break_uxop",
+  "visa_number",
+  "column_break_zcgx",
+  "visa_expiry_date",
+  "section_break_nkel",
+  "driving_licence",
+  "column_break_flbz",
+  "licence_expiry_date",
+  "section_break_q7wj",
+  "reminder_date"
  ],
  "fields": [
   {
@@ -69,7 +78,8 @@
    "fieldtype": "Date",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "ID Expiry Date"
+   "label": "ID Expiry Date",
+   "reqd": 1
   },
   {
    "fieldname": "passport_details_section",
@@ -96,16 +106,6 @@
    "reqd": 1
   },
   {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Expiry Alert",
-   "print_hide": 1,
-   "read_only": 1,
-   "search_index": 1
-  },
-  {
    "fieldname": "column_break_qxue",
    "fieldtype": "Column Break"
   },
@@ -117,16 +117,62 @@
    "in_standard_filter": 1,
    "label": "Employee Name",
    "unique": 1
+  },
+  {
+   "fieldname": "section_break_uxop",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fetch_from": "employee.custom_visa_no",
+   "fieldname": "visa_number",
+   "fieldtype": "Data",
+   "label": "Visa Number"
+  },
+  {
+   "fieldname": "column_break_zcgx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "visa_expiry_date",
+   "fieldtype": "Date",
+   "label": "Visa Expiry Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_nkel",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "driving_licence",
+   "fieldtype": "Data",
+   "label": "Driving Licence"
+  },
+  {
+   "fieldname": "column_break_flbz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "licence_expiry_date",
+   "fieldtype": "Date",
+   "label": "Licence Expiry Date"
+  },
+  {
+   "fieldname": "section_break_q7wj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "reminder_date",
+   "fieldtype": "Date",
+   "label": "Reminder Date"
   }
  ],
  "index_web_pages_for_search": 1,
- "is_submittable": 1,
  "links": [],
- "modified": "2025-02-01 20:27:13.008319",
+ "modified": "2025-02-03 20:11:59.476067",
  "modified_by": "Administrator",
  "module": "Nationalpf",
  "name": "Expiry Alert",
- "naming_rule": "By fieldname",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {
@@ -139,7 +185,6 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
-   "submit": 1,
    "write": 1
   }
  ],

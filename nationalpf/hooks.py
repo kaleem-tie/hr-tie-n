@@ -151,7 +151,7 @@ doc_events = {
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
+scheduler_events = {
 # 	"all": [
 # 		"nationalpf.tasks.all"
 # 	],
@@ -167,7 +167,10 @@ doc_events = {
 # 	"monthly": [
 # 		"nationalpf.tasks.monthly"
 # 	],
-# }
+"cron":{
+       "* 10 * * *":["nationalpf.nationalpf.doctype.expiry_alert.expiry_alert.email_alert_for_expiry_date"]
+   } 
+ }
 
 # Testing
 # -------
