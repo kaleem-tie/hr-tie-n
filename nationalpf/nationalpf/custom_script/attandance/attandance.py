@@ -317,7 +317,7 @@ def get_ot_hours_pay(self, method = None):
 			new_additional_salary.update({
 				"employee": self.employee,
 				"company": self.company,
-				"payroll_date": "2024-11-25",# formatted_date,
+				"payroll_date": formatted_date,
 				"salary_component": "OT Arrears",
 				"currency": "AED",	
 				"amount": self.custom_ot_pay_amount,
@@ -338,6 +338,7 @@ def get_ot_hours_pay(self, method = None):
 @frappe.whitelist()
 def get_employee_addision_salary(self):
 	try:
+		settings = frappe.get_doc("System Settings",'System Settings')
 		current_year = datetime.now().year
 		current_month = datetime.now().month
 		date_25th = datetime(current_year, current_month, 25)
@@ -347,7 +348,7 @@ def get_employee_addision_salary(self):
 		add_addisnal_salary.update({
 			"employee": self.employee,
 			"company": self.company,
-			"payroll_date": "2024-11-25",# formatted_date,
+			"payroll_date":  formatted_date,
 			"salary_component": "Attendance Allowance",
 			"currency": "AED",	
 			"amount": 100,
@@ -366,6 +367,7 @@ def get_employee_addision_salary(self):
 @frappe.whitelist()
 def incentive_amount(self,amount):
 	try:
+		settings = frappe.get_doc("System Settings",'System Settings')
 		current_year = datetime.now().year
 		current_month = datetime.now().month
 		date_25th = datetime(current_year, current_month, 25)
@@ -375,7 +377,7 @@ def incentive_amount(self,amount):
 		add_addisnal_salary.update({
 			"employee": self.employee,
 			"company": self.company,
-			"payroll_date": "2024-11-25",# formatted_date,
+			"payroll_date":  formatted_date,
 			"salary_component": "Incentive",
 			"currency": "AED",	
 			"amount": amount,
